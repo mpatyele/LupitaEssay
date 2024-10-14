@@ -59,17 +59,19 @@ public class BirthdayExample {
 
     // Get user input
     Scanner input = new Scanner(System.in);
-    System.out.print("Enter a name (full or partial): ");
+    System.out.print("Enter a name: ");
     String inputName = input.nextLine().trim();
 
     // Check for exact matches first
     if (birthdayMap.containsKey(inputName)) {
-      System.out.println(inputName + "'s birthday is on " + birthdayMap.get(inputName) + ".");
+      System.out.println("name = " + inputName);
+      System.out.println("The birthday is " + birthdayMap.get(inputName));
     } else {
       boolean found = false;
       for (Map.Entry<String, String> entry : birthdayMap.entrySet()) {
         if (entry.getKey().toLowerCase().contains(inputName.toLowerCase())) {
-          System.out.println(entry.getKey() + "'s birthday is on " + entry.getValue() + ".");
+          System.out.println("name = " + entry.getKey());
+          System.out.println("The birthday is " + entry.getValue());
           found = true;
         }
       }
