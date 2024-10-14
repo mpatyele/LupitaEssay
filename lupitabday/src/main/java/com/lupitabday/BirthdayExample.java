@@ -1,4 +1,4 @@
-package com.example;
+package com.lupitabday;
 
 import java.io.*;
 import java.util.*;
@@ -10,18 +10,14 @@ public class BirthdayExample {
   // this is a private and static hashmap to store the birthdays
   private static HashMap<String, String> birthdayMap = new HashMap<String, String>();
 
-  // this code reads a the json file
-  // students do not have to change this function
+  // this code reads a JSON file
   public static JSONArray readJSONArrayFile(String fileName) {
-    // JSON parser object to parse read file
     JSONParser jsonParser = new JSONParser();
-
     JSONArray birthdayArr = null;
 
     // Read JSON file
     try (FileReader reader = new FileReader(fileName)) {
       Object obj = jsonParser.parse(reader);
-
       birthdayArr = (JSONArray) obj;
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -34,54 +30,56 @@ public class BirthdayExample {
     return birthdayArr;
   }
 
-  // students do not have to change this function
+  // Initialize the map from the JSON file
   public static void initializeMap(final String pathToFile) {
     JSONArray jsonData = readJSONArrayFile(pathToFile);
 
-    // loop over list
+    // Loop over the list
     String birthday, name;
     JSONObject obj;
     for (Integer i = 0; i < jsonData.size(); i++) {
-      // parse the object and pull out the name and birthday
+      // Parse the object and pull out the name and birthday
       obj = (JSONObject) jsonData.get(i);
       birthday = (String) obj.get("birthday");
       name = (String) obj.get("name");
 
-      // add the name and birthday in to a hashmap
+      // Add the name and birthday into the hashmap
       birthdayMap.put(name, birthday);
-
-      // print the names and birthdays
-      System.out.println("name = " + name);
-      System.out.println("birthday = " + birthday);
     }
   }
 
   public static void main(final String[] args) {
-    /*
-     * students will need to change the path below to work on THEIR laptop. this is currently the path for my laptop.
-     * if students do not know or understand what a "path" is, students should first complete the
-     * extra credit module on Files, Directories, and Folders in Canvas.
-     */
-    String pathToFile =
-      "C:/Users/jerom/Documents/GitHub/class-java/birthday-lupita-lookup-app/lupita/src/main/java/com/example/birthdayOnlyForTesting.json";
+    String pathToFile = "C:\\Users\\maria\\Documents\\GitHub\\LupitaEssay\\lupitabday\\src\\main\\java\\com\\lupitabday\\birthday.json";
 
-    // students should change the code below in order to implment their own solution
-
-    // initialize the hash map
+    // Initialize the hash map
     initializeMap(pathToFile);
 
-    // read user input from keyboard
+    // Read user input from keyboard
     System.out.println("Reading user input into a string");
 
-    // get user input
+    // Get user input
     Scanner input = new Scanner(System.in);
-    System.out.print("Enter a name:");
-    String name = input.nextLine();
+    System.out.print("Enter a name (full or partial): ");
+    String inputName = input.nextLine().trim();
 
-    // print user input
-    System.out.println("name = " + name);
+    // Check for exact matches first
+    if (birthdayMap.containsKey(inputName)) {
+      System.out.println(inputName + "'s birthday is on " + birthdayMap.get(inputName) + ".");
+    } else {
+      boolean found = false;
+      for (Map.Entry<String, String> entry : birthdayMap.entrySet()) {
+        if (entry.getKey().toLowerCase().contains(inputName.toLowerCase())) {
+          System.out.println(entry.getKey() + "'s birthday is on " + entry.getValue() + ".");
+          found = true;
+        }
+      }
 
-    // close the scanner
+      if (!found) {
+        System.out.println("Sorry, no birthdays found for the name containing \"" + inputName + "\".");
+      }
+    }
+
+    // Close the scanner
     input.close();
   }
 }
